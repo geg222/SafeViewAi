@@ -2,6 +2,9 @@ import cv2
 import numpy as np
 import time
 
+# 모자이크 토글 변수
+enable_blur = True
+
 # 얼굴 탐지 모델 경로
 prototxt = "deploy.prototxt"
 weights = "res10_300x300_ssd_iter_140000.caffemodel"
@@ -50,11 +53,25 @@ while True:
 
         # ROI 추출 및 픽셀화
         face = frame[startY:endY, startX:endX]
-        face = anonymize_face_pixelate(face, blocks=15)
+        if enable_blur:
+            face = anonymize_face_pixelate(face, blocks=15)
         frame[startY:endY, startX:endX] = face
 
+    # 모자이크 상태 표시 텍스트
+    status_text = "Blur ON" if enable_blur else "Blur OFF"
+    cv2.putText(frame, status_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                1.0, (0, 255, 0) if enable_blur else (0, 0, 255), 2)
+
     cv2.imshow("Face Pixelated", frame)
-    if cv2.waitKey(1) & 0xFF == ord("q"):
+
+    key = cv2.waitKey(1) & 0xFF
+
+    # 'b' 키를 누르면 모자이크 토글
+    if key == ord('b'):
+        enable_blur = not enable_blur
+
+    # 'q' 키로 종료
+    if key == ord('q'):
         break
 
 # 종료
