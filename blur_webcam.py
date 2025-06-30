@@ -62,7 +62,7 @@ while True:
     cv2.putText(frame, status_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                 1.0, (0, 255, 0) if enable_blur else (0, 0, 255), 2)
 
-    cv2.imshow("Face Pixelated", frame)
+    cv2.imshow("SafeView", frame)
 
     key = cv2.waitKey(1) & 0xFF
 
