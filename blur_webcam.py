@@ -62,6 +62,15 @@ while True:
     cv2.putText(frame, status_text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                 1.0, (0, 255, 0) if enable_blur else (0, 0, 255), 2)
 
+    # 탐지된 얼굴 수 표시
+    face_count = 0
+    for i in range(detections.shape[2]):
+        confidence = detections[0, 0, i, 2]
+        if confidence >= 0.5:
+            face_count += 1
+    cv2.putText(frame, f"Faces: {face_count}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX,
+                1.0, (255, 255, 255), 2)
+
     cv2.imshow("SafeView", frame)
 
     key = cv2.waitKey(1) & 0xFF
